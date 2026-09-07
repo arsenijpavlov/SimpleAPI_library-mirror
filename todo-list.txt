@@ -6,4 +6,5 @@
 * добавить GetStringAs*() ?
 * parser/writer XML
 * parser/writer YAML
+* static config: поддержка типа значения simpleapi::Config (как альтернатива std::variant)
 *
