@@ -9,3 +9,4 @@
 * static config: поддержка типа опционального типа (как альтернатива std::optional) (utils::Optional<T>)
 * static config: поддержка типа вариативного типа (как альтернатива std::variant)
 * обновить главный README.md
+* обновить user docs про новые поддерживаемые типы в SimpleAPI Static Config
