@@ -41,41 +41,42 @@ using UMapPlaceholder   = std::unordered_map<int, float>;
 using UMMapPlaceholder  = std::unordered_multimap<int, float>;
 using PairPlaceholder   = std::pair<std::string, int>;
 
-#define STRUCT_FIELDS(X)                                                                                 \
-    X(bool,                           val_b,       1                                                   ) \
-    X(int,                            val_i,       1                                                   ) \
-    X(uint8_t,                        val_u8,      1                                                   ) \
-    X(uint16_t,                       val_u16,     1                                                   ) \
-    X(uint32_t,                       val_u32,     1                                                   ) \
-    X(uint64_t,                       val_u64,     1                                                   ) \
-    X(int8_t,                         val_i8,      1                                                   ) \
-    X(int16_t,                        val_i16,     1                                                   ) \
-    X(int32_t,                        val_i32,     1                                                   ) \
-    X(int64_t,                        val_i64,     1                                                   ) \
-    X(float,                          val_f,       1                                                   ) \
-    X(double,                         val_d,       1                                                   ) \
-    X(long double,                    val_ld,      1                                                   ) \
-    X(std::string,                    val_s,       "str"                                               ) \
-    X(CustomEnum_1,                   my_enum_1,   CustomEnum_1::e1                                    ) \
-    X(CustomEnum_2,                   my_enum_2,   CustomEnum_2::e1                                    ) \
-    X(std::vector<std::string>,       val_vs,      (std::vector<std::string>({"s1", "s2"}))            ) \
-    X(std::list<std::string>,         val_ls,      (std::list<std::string>({"s1", "s2"}))              ) \
-    X(std::forward_list<std::string>, val_fls,     (std::forward_list<std::string>({"s1", "s2"}))      ) \
-    X(std::deque<std::string>,        val_ds,      (std::deque<std::string>({"s1", "s2"}))             ) \
-    X(std::set<int>,                  val_si,      (std::set<int>({1, 2}))                             ) \
-    X(std::multiset<int>,             val_msi,     (std::multiset<int>({1, 1, 2, 3}))                  ) \
-    X(std::unordered_set<int>,        val_usi,     (std::unordered_set<int>({1, 2}))                   ) \
-    X(std::unordered_multiset<int>,   val_umsi,    (std::unordered_multiset<int>({1, 1, 2, 3}))        ) \
-    X(std::queue<int>,                val_qi,      (std::queue<int>({1, 1, 2, 3}))                     ) \
-    X(PQueuePlaceholder,              val_pqi,     (PQueuePlaceholder(vec_int.begin(), vec_int.end())) ) \
-    X(std::stack<int>,                val_stack_i, (std::stack<int>({1, 1, 2, 3}))                     ) \
-    X(ArrayPlaceholder,               val_ar,      (ArrayPlaceholder({1, 2, 3, 4, 5}))                 ) \
-    X(std::bitset<5>,                 val_bs,      (std::bitset<5>(0b01010))                           ) \
-    X(MapPlaceholder,                 map,         (MapPlaceholder({{1, 2.3f}, {2, 2.4f}}))            ) \
-    X(MMapPlaceholder,                mmap,        (MMapPlaceholder({{1, 2.3f}, {2, 2.4f}}))           ) \
-    X(UMapPlaceholder,                umap,        (UMapPlaceholder({{1, 2.3f}, {2, 2.4f}}))           ) \
-    X(UMMapPlaceholder,               ummap,       (UMMapPlaceholder({{1, 2.3f}, {2, 2.4f}}))          ) \
-    X(PairPlaceholder,                val_pair,    (PairPlaceholder("key", 2.3))                       ) \
+#define STRUCT_FIELDS(X)                                                                                         \
+    X(bool,                           val_b,       1                                                           ) \
+    X(int,                            val_i,       1                                                           ) \
+    X(uint8_t,                        val_u8,      1                                                           ) \
+    X(uint16_t,                       val_u16,     1                                                           ) \
+    X(uint32_t,                       val_u32,     1                                                           ) \
+    X(uint64_t,                       val_u64,     1                                                           ) \
+    X(int8_t,                         val_i8,      1                                                           ) \
+    X(int16_t,                        val_i16,     1                                                           ) \
+    X(int32_t,                        val_i32,     1                                                           ) \
+    X(int64_t,                        val_i64,     1                                                           ) \
+    X(float,                          val_f,       1                                                           ) \
+    X(double,                         val_d,       1                                                           ) \
+    X(long double,                    val_ld,      1                                                           ) \
+    X(std::string,                    val_s,       "str"                                                       ) \
+    X(CustomEnum_1,                   my_enum_1,   CustomEnum_1::e1                                            ) \
+    X(CustomEnum_2,                   my_enum_2,   CustomEnum_2::e1                                            ) \
+    X(std::vector<std::string>,       val_vs,      (std::vector<std::string>({"s1", "s2"}))                    ) \
+    X(std::list<std::string>,         val_ls,      (std::list<std::string>({"s1", "s2"}))                      ) \
+    X(std::forward_list<std::string>, val_fls,     (std::forward_list<std::string>({"s1", "s2"}))              ) \
+    X(std::deque<std::string>,        val_ds,      (std::deque<std::string>({"s1", "s2"}))                     ) \
+    X(std::set<int>,                  val_si,      (std::set<int>({1, 2}))                                     ) \
+    X(std::multiset<int>,             val_msi,     (std::multiset<int>({1, 1, 2, 3}))                          ) \
+    X(std::unordered_set<int>,        val_usi,     (std::unordered_set<int>({1, 2}))                           ) \
+    X(std::unordered_multiset<int>,   val_umsi,    (std::unordered_multiset<int>({1, 1, 2, 3}))                ) \
+    X(std::queue<int>,                val_qi,      (std::queue<int>({1, 1, 2, 3}))                             ) \
+    X(PQueuePlaceholder,              val_pqi,     (PQueuePlaceholder(vec_int.begin(), vec_int.end()))         ) \
+    X(std::stack<int>,                val_stack_i, (std::stack<int>({1, 1, 2, 3}))                             ) \
+    X(ArrayPlaceholder,               val_ar,      (ArrayPlaceholder({1, 2, 3, 4, 5}))                         ) \
+    X(std::bitset<5>,                 val_bs,      (std::bitset<5>(0b01010))                                   ) \
+    X(MapPlaceholder,                 map,         (MapPlaceholder({{1, 2.3f}, {2, 2.4f}}))                    ) \
+    X(MMapPlaceholder,                mmap,        (MMapPlaceholder({{1, 2.3f}, {2, 2.4f}}))                   ) \
+    X(UMapPlaceholder,                umap,        (UMapPlaceholder({{1, 2.3f}, {2, 2.4f}}))                   ) \
+    X(UMMapPlaceholder,               ummap,       (UMMapPlaceholder({{1, 2.3f}, {2, 2.4f}}))                  ) \
+    X(PairPlaceholder,                val_pair,    (PairPlaceholder("key", 2.3))                               ) \
+    X(simpleapi::Config,              dyn_cfg,     (simpleapi::Config(simpleapi::ValueType::eJson, "key", 2.3))) \
 
 SAPI_REGISTER_CONFIG(CustomStruct, STRUCT_FIELDS)
 //-------------------------------------------------------------------------

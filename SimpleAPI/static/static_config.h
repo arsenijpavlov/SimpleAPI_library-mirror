@@ -23,6 +23,7 @@
 #include "container_types_as_queue.h"  // IWYU pragma: keep
 #include "container_types_as_stack.h"  // IWYU pragma: keep
 #include "container_types_as_map.h"    // IWYU pragma: keep
+#include "container_type_as_config.h"  // IWYU pragma: keep
 #include "pair_types.h"                // IWYU pragma: keep
 #include "enum_types.h"                // IWYU pragma: keep
 #include <functional>                  // IWYU pragma: keep
