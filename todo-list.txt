@@ -6,5 +6,6 @@
 * добавить GetStringAs*() ?
 * parser/writer XML
 * parser/writer YAML
-* static config: поддержка типа значения simpleapi::Config (как альтернатива std::variant)
-*
+* static config: поддержка типа опционального типа (как альтернатива std::optional) (utils::Optional<T>)
+* static config: поддержка типа вариативного типа (как альтернатива std::variant)
+* обновить главный README.md
