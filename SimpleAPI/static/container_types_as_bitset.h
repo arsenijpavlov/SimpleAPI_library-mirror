@@ -55,15 +55,13 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_bitset<T>::va
                 }
             }
 
-            if(ExecuteValidator(lambda, temp_value, key))
-            {
-                field = temp_value;
-                return true;
+            if(ExecuteValidator(lambda, temp_value, key)) {
+                return false;
             }
-            return false;
+            field = temp_value;
         }
 
-        return true; // ключа не существует, игнорим проверки
+        return true;
     }
 
     // комментарии учитываются только при записи

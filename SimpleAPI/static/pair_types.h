@@ -151,12 +151,11 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_pair<T>::value>::type>
                 break; // забираем первое же значение
             }
 
-            if(ExecuteValidator(lambda, temp_value, key))
-            {
-                field = temp_value;
-                return true;
+            if(ExecuteValidator(lambda, temp_value, key)) {
+                return false;
             }
-            return false;
+
+            field = temp_value;
         }
 
         return true; // ключа не существует, игнорим проверки

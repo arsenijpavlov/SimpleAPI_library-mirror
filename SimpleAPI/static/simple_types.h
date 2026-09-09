@@ -36,7 +36,7 @@ struct ConfigTypeTraits<T, typename std::enable_if<!is_config_struct<T>::value
             field = config[key].get<T>();
         }
 
-        return true; // ключа не существует, игнорим проверки
+        return true;
     }
 
     template<typename Lambda, typename... Args,
@@ -49,15 +49,14 @@ struct ConfigTypeTraits<T, typename std::enable_if<!is_config_struct<T>::value
         if(config.isMapContainer() && config.containsKey(key)) {
             T temp_value = config[key].get<T>();
 
-            if(ExecuteValidator(lambda, temp_value, key))
-            {
-                field = temp_value;
-                return true;
+            if(ExecuteValidator(lambda, temp_value, key)) {
+                return false;
             }
-            return false;
+
+            field = temp_value;
         }
 
-        return true; // ключа не существует, игнорим проверки
+        return true;
     }
 
     // комментарии учитываются только при записи

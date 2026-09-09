@@ -151,15 +151,14 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_map<T>::value
                 temp_value.insert(std::make_pair(parse_key<KeyType>(c.first), item_temp_value));
             }
 
-            if(ExecuteValidator(lambda, temp_value, key))
-            {
-                field = temp_value;
-                return true;
+            if(!ExecuteValidator(lambda, temp_value, key)) {
+                return false;
             }
-            return false;
+
+            field = temp_value;
         }
 
-        return true; // ключа не существует, игнорим проверки
+        return true;
     }
 
     // комментарии учитываются только при записи

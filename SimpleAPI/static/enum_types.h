@@ -26,6 +26,7 @@ struct ConfigTypeTraits<T, typename std::enable_if<std::is_enum<T>::value>::type
             if(temp_value == T::_UNDEFINED_STATE_) {
                 return false;
             }
+
             field = temp_value;
         }
 
