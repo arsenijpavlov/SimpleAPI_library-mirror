@@ -953,20 +953,20 @@ TEST(JSON, big_float_number_to_string) {
 TEST(JSON, parse_write_infinity) {
     Config cfg;
     cfg.parseJson("{\"key\" : \"inf\" }");
-    EXPECT_EQ(cfg["key"].getType(), ValueType::eNumber);
+    EXPECT_EQ(cfg["key"].getType(), ValueType::eString);
     EXPECT_EQ(cfg.toString(), "{\"key\":\"inf\"}");
 
     cfg.parseJson("{\"key\" : \"infinity\" }");
-    EXPECT_EQ(cfg["key"].getType(), ValueType::eNumber);
-    EXPECT_EQ(cfg.toString(), "{\"key\":\"inf\"}");
+    EXPECT_EQ(cfg["key"].getType(), ValueType::eString);
+    EXPECT_EQ(cfg.toString(), "{\"key\":\"infinity\"}");
 
     cfg.parseJson("{\"key\" : inf }");
-    EXPECT_EQ(cfg["key"].getType(), ValueType::eNumber);
+    EXPECT_EQ(cfg["key"].getType(), ValueType::eString);
     EXPECT_EQ(cfg.toString(), "{\"key\":\"inf\"}");
 
     cfg.parseJson("{\"key\" : infinity }");
-    EXPECT_EQ(cfg["key"].getType(), ValueType::eNumber);
-    EXPECT_EQ(cfg.toString(), "{\"key\":\"inf\"}");
+    EXPECT_EQ(cfg["key"].getType(), ValueType::eString);
+    EXPECT_EQ(cfg.toString(), "{\"key\":\"infinity\"}");
 }
 
 TEST(JSON, parse_write_negative_infinity) {

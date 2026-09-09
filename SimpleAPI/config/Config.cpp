@@ -4244,26 +4244,28 @@ Config CreateElementFromString(std::string &&value_string, const ConfigFormat fo
                 if(std::regex_match(value_string, reg))
                     return Config(std::stold(value_string));
             } catch (...) {}
-            // обработка бесконестей (inf/infinity/∞, -inf/-infinity/-∞)
-            std::string temp = value_string.substr(0, value_string.size() < 11 ? value_string.size() : 11); //размер от максимального "-infinity"
-            if(!temp.empty()) {
-                // преобразование в lowercase
-                std::transform(temp.begin(), temp.end(), temp.begin(), [](char c) { return std::tolower(c); });
-                // удаление кавычек в начале и конце строки
-                if(temp.front() == temp.back() && (temp.front() == '"' || temp.front() == '\'')) {
-                    temp.erase(0, 1);
-                    temp.pop_back();
-                }
-                bool is_negative = temp.front() == '-';
-                if(is_negative) {
-                    temp.erase(0, 1);
-                }
-                if(temp == "inf" || temp == "infinity" || temp == "∞") {
-                    long double inf_d = is_negative ? -std::numeric_limits<long double>::infinity()
-                                                    : std::numeric_limits<long double>::infinity();
-                    return Config(inf_d);
-                }
-            }
+
+            //FIXME: переместить в парсер number_utils.h
+            // // обработка бесконестей (inf/infinity/∞, -inf/-infinity/-∞)
+            // std::string temp = value_string.substr(0, value_string.size() < 11 ? value_string.size() : 11); //размер от максимального "-infinity"
+            // if(!temp.empty()) {
+            //     // преобразование в lowercase
+            //     std::transform(temp.begin(), temp.end(), temp.begin(), [](char c) { return std::tolower(c); });
+            //     // удаление кавычек в начале и конце строки
+            //     if(temp.front() == temp.back() && (temp.front() == '"' || temp.front() == '\'')) {
+            //         temp.erase(0, 1);
+            //         temp.pop_back();
+            //     }
+            //     bool is_negative = temp.front() == '-';
+            //     if(is_negative) {
+            //         temp.erase(0, 1);
+            //     }
+            //     if(temp == "inf" || temp == "infinity" || temp == "∞") {
+            //         long double inf_d = is_negative ? -std::numeric_limits<long double>::infinity()
+            //                                         : std::numeric_limits<long double>::infinity();
+            //         return Config(inf_d);
+            //     }
+            // }
         }
         /*ARRAY*/ {
             if(first == '[') {

@@ -370,7 +370,36 @@ std::string ElementArray::toJsonString(const CommentDesign &design, const int8_t
             ret += utils::RemoveStartTabulations(temp);
         } else {
             if(!m_values[i]->isString() && !m_values[i]->isChar()) {
-                ret += temp;
+                //в числах могут быть бесконечности
+                if(m_values[i]->isNumber()) {
+                    if(std::any_of(temp.begin(), temp.end(),
+                                    [](char c) {
+                                        switch(c) {
+                                        case '0':
+                                        case '1':
+                                        case '2':
+                                        case '3':
+                                        case '4':
+                                        case '5':
+                                        case '6':
+                                        case '7':
+                                        case '8':
+                                        case '9':
+                                        case '-':
+                                        case '.':   return false;
+                                        default:    return true;
+                                        }
+                                    }
+                                    )
+                        )
+                    {
+                        ret += "\"" + temp + "\"";
+                    } else {
+                        ret += temp;
+                    }
+                } else {
+                    ret += temp;
+                }
             } else {
                 utils::SplittedLines sl = utils::SplitWithoutColumned(temp);
                 // все строки кроме первой выровнять по первой строке
