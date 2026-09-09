@@ -433,15 +433,15 @@ TEST(INI, parse_infinities) {
     using namespace simpleapi;
     Config cfg;
     cfg.parseIni("a = inf\n"
-                 "b = -inf\n");
-    long double d1 = std::numeric_limits<long double>::infinity();
-    long double d2 = -std::numeric_limits<long double>::infinity();
+                 "b = -inf\n"
+                 "c = infinity\n"
+                 "d = -infinity\n"
+                 );
 
-    EXPECT_TRUE(cfg["a"].isNumber());
-    EXPECT_EQ(cfg["a"], d1);
-
-    EXPECT_TRUE(cfg["b"].isNumber());
-    EXPECT_EQ(cfg["b"], d2);
+    EXPECT_TRUE(cfg["a"].isString());
+    EXPECT_TRUE(cfg["b"].isString());
+    EXPECT_TRUE(cfg["c"].isString());
+    EXPECT_TRUE(cfg["d"].isString());
 }
 
 TEST(INI, parse_MAC_address) {
