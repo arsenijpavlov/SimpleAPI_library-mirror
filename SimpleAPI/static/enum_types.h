@@ -22,7 +22,7 @@ struct ConfigTypeTraits<T, typename std::enable_if<std::is_enum<T>::value>::type
 
         if(config.isMapContainer() && config.containsKey(key)) {
             T temp_value;
-            EnumFromString(config[key].getString(), field);
+            EnumFromString(config[key].getString(), temp_value);
             if(temp_value == T::_UNDEFINED_STATE_) {
                 return false;
             }
