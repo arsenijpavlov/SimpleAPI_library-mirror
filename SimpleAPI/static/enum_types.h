@@ -27,10 +27,9 @@ struct ConfigTypeTraits<T, typename std::enable_if<std::is_enum<T>::value>::type
                 return false;
             }
             field = temp_value;
-            return true;
         }
 
-        return true; // ключа не существует, игнорим проверки
+        return true;
     }
 
     template<typename Lambda, typename... Args,
