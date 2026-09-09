@@ -31,12 +31,15 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_config_struct<T>::value
     {
         // std::cout << "[debug] load structure key=\"" << key << "\"" << std::endl;
 
+        T temp_value;
         if(config.isMapContainer() && config.containsKey(key)) {
             const Config& ck = config[key];
-            T temp_value;
-            if(!temp_value.loadConfig(ck))
+            if(!temp_value.loadConfig(ck)) {
                 return false;
+            }
         }
+
+        field = temp_value;
         return true;
     }
 
@@ -49,17 +52,17 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_config_struct<T>::value
         if(config.isMapContainer() && config.containsKey(key)) {
             const Config& ck = config[key];
             T temp_value;
-            if(!temp_value.loadConfig(ck))
+            if(!temp_value.loadConfig(ck)) {
                 return false;
-
-            if(ExecuteValidator(lambda, temp_value, key))
-            {
-                field = temp_value;
-                return true;
             }
-            return false;
+
+            if(ExecuteValidator(lambda, temp_value, key)) {
+                return false;
+            }
+
+            field = temp_value;
         }
-        return true; // ключа не существует, игнорим проверки
+        return true;
     }
 
     // комментарии учитываются только при записи
@@ -69,14 +72,8 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_config_struct<T>::value
     {
         // std::cout << "[debug] save structure key=\"" << key << "\"" << std::endl;
 
-        if(config.isMapContainer())
-        {
-            config[key] = field.saveConfig();
-            config[key].setComment(prefix_comment, suffix_comment);
-        } else {
-            config = field.saveConfig();
-            config.setComment(prefix_comment, suffix_comment);
-        }
+        config[key] = field.saveConfig();
+        config[key].setComment(prefix_comment, suffix_comment);
     }
 };
 
