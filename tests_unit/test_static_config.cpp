@@ -24,12 +24,25 @@ SAPI_REGISTER_ENUM(CustomEnum_1, ENUM1_VARIANTS)
 
 // пример с заданными внутренними индексами
 #define ENUM2_VARIANTS(X) \
-    X(e1, 10) \
-    X(e2, 20) \
+    X(e1, 10)             \
+    X(e2, 20)             \
     X(e3, 30)
 
 // пример также учитывает наследование enum class от uint8_t
 SAPI_REGISTER_ENUM(CustomEnum_2, ENUM2_VARIANTS, uint8_t)
+//-------------------------------------------------------------------------
+
+// частный случай со значениями бесконечности: в Config оно распарсится как число, даже если подразумевается строка
+#define ENUM_INF_VARIANTS(X) \
+    X(inf, 10)               \
+    X(infinity, 20)          \
+    X(other, 30)
+
+SAPI_REGISTER_ENUM(CustomEnum_Inf, ENUM_INF_VARIANTS, uint8_t)
+
+#define INF_FIELDS(X) \
+    X(CustomEnum_Inf, var, CustomEnum_Inf::infinity)
+SAPI_REGISTER_CONFIG(InfConf, INF_FIELDS)
 //-------------------------------------------------------------------------
 
 using PQueuePlaceholder = std::priority_queue<int, std::vector<int>, std::less<int>>;
@@ -58,6 +71,7 @@ using PairPlaceholder   = std::pair<std::string, int>;
     X(std::string,                    val_s,       "str"                                                       ) \
     X(CustomEnum_1,                   my_enum_1,   CustomEnum_1::e1                                            ) \
     X(CustomEnum_2,                   my_enum_2,   CustomEnum_2::e1                                            ) \
+    X(CustomEnum_Inf,                 my_enum_3,   CustomEnum_Inf::infinity                                    ) \
     X(std::vector<std::string>,       val_vs,      (std::vector<std::string>({"s1", "s2"}))                    ) \
     X(std::list<std::string>,         val_ls,      (std::list<std::string>({"s1", "s2"}))                      ) \
     X(std::forward_list<std::string>, val_fls,     (std::forward_list<std::string>({"s1", "s2"}))              ) \
@@ -97,11 +111,11 @@ SAPI_REGISTER_CONFIG(MapConfig, MAP_FIELDS)
 // разные варианты использования лямбд и комментариев
 auto lambda_1 = [](const int& val) -> bool {
     /* ... */
-    return val;
+    return true;
 };
 auto lambda_2 = [](const int& val, const std::string& key) -> bool {
     /* ... */
-    return val;
+    return true;
 };
 
 #define WITH_LAMBDA_FIELDS(X)                                                          \
@@ -136,10 +150,17 @@ TEST(STATIC, main) {
 
     cs2.cs = cs;
     cs2.i  = 30;
+    cs2.cs.my_enum_3 = CustomEnum_Inf::inf;
 
     // далее идёт сохранение дефолтных настроек в указанный формат конфига и чтение структуры из него же
     Config cfg = cs2.saveConfig();
-    cs2_copy.loadConfig(cfg);
+    cfg.writeFile("static.json", simpleapi::ConfigFormat::eJSON);
+    EXPECT_TRUE(cs2_copy.loadConfig(cfg));
+
+    EXPECT_EQ(cs2.cs,  cs2_copy.cs);
+    EXPECT_EQ(cs2.i,   cs2_copy.i);
+    EXPECT_EQ(cs2.mc,  cs2_copy.mc);
+    EXPECT_EQ(cs2.swl, cs2_copy.swl);
 
     EXPECT_EQ(cs2, cs2_copy);
 }
