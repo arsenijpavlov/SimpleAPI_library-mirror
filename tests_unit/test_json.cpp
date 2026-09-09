@@ -952,9 +952,21 @@ TEST(JSON, big_float_number_to_string) {
 
 TEST(JSON, parse_write_infinity) {
     Config cfg;
-    cfg.parseJson("{\"a\" : \"inf\" }");
+    cfg.parseJson("{\"as_string\" : \"inf\" }");
+    EXPECT_EQ(cfg["as_string"].getType(), ValueType::eNumber);
+    EXPECT_EQ(cfg.toString(), "{\"as_string\":\"inf\"}");
 
-    EXPECT_EQ(cfg["a"].toString(), "inf");
+    cfg.parseJson("{\"as_string\" : \"infinity\" }");
+    EXPECT_EQ(cfg["as_string"].getType(), ValueType::eNumber);
+    EXPECT_EQ(cfg.toString(), "{\"as_string\":\"inf\"}");
+
+    cfg.parseJson("{\"as_number\" : inf }");
+    EXPECT_EQ(cfg["as_number"].getType(), ValueType::eNumber);
+    EXPECT_EQ(cfg.toString(), "{\"as_number\":\"inf\"}");
+
+    cfg.parseJson("{\"as_number\" : infinity }");
+    EXPECT_EQ(cfg["as_number"].getType(), ValueType::eNumber);
+    EXPECT_EQ(cfg.toString(), "{\"as_number\":\"inf\"}");
 }
 
 TEST(JSON, parse_write_negative_infinity) {
