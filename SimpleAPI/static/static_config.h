@@ -261,7 +261,7 @@
                                                                       \
         bool operator!=(const StructName& other) const {              \
             if(this == &other) return false;                          \
-            return (*this) != other;                                  \
+                return !((*this) == other);                           \
         }                                                             \
     };
 
