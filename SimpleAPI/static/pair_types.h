@@ -116,6 +116,7 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_pair<T>::value>::type>
                 Type item_temp_value;
 
                 if(!Loader((*c.second.get()), item_temp_value)) {
+                    static_config_error_str = "loader for [" + key + "] failed\n";
                     return false;
                 }
 
@@ -144,6 +145,7 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_pair<T>::value>::type>
                 Type item_temp_value;
 
                 if(!Loader((*c.second.get()), item_temp_value)) {
+                    static_config_error_str = "inner loader for [" + key + "] failed\n";
                     return false;
                 }
 
@@ -151,14 +153,15 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_pair<T>::value>::type>
                 break; // забираем первое же значение
             }
 
-            if(ExecuteValidator(lambda, temp_value, key)) {
+            if(!ExecuteValidator(lambda, temp_value, key)) {
+                static_config_error_str = "validate for [" + key + "] failed\n";
                 return false;
             }
 
             field = temp_value;
         }
 
-        return true; // ключа не существует, игнорим проверки
+        return true;
     }
 
     // комментарии учитываются только при записи
@@ -174,6 +177,11 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_pair<T>::value>::type>
         Config temp = Saver(field.second, prefix_comment, suffix_comment);
         config[key][extract_key(field.first)] = temp;
         config[key].setComment(prefix_comment, suffix_comment);
+    }
+
+    static bool compare(const T& field, const T& other, const std::string& key)
+    {
+        return field == other;
     }
 };
 

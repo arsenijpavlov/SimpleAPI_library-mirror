@@ -55,7 +55,8 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_bitset<T>::va
                 }
             }
 
-            if(ExecuteValidator(lambda, temp_value, key)) {
+            if(!ExecuteValidator(lambda, temp_value, key)) {
+                static_config_error_str = "validate for [" + key + "] failed\n";
                 return false;
             }
             field = temp_value;
@@ -77,6 +78,11 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_bitset<T>::va
             config[key].push_back(temp);
         }
         config[key].setComment(prefix_comment, suffix_comment);
+    }
+
+    static bool compare(const T& field, const T& other, const std::string& key)
+    {
+        return field == other;
     }
 };
 

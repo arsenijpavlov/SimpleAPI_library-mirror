@@ -31,6 +31,7 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_queue<T>::val
                 Type item_temp_value;
 
                 if(!Loader((*c.get()), item_temp_value)) {
+                    static_config_error_str += "inner loader for [" + key + "] failed\n";
                     return false;
                 }
 
@@ -59,21 +60,22 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_queue<T>::val
                 Type item_temp_value;
 
                 if(!Loader((*c.get()), item_temp_value)) {
+                    static_config_error_str += "inner loader for [" + key + "] failed\n";
                     return false;
                 }
 
                 temp_value.push(item_temp_value);
             }
 
-            if(ExecuteValidator(lambda, temp_value, key))
-            {
-                field.swap(temp_value);
-                return true;
+            if(!ExecuteValidator(lambda, temp_value, key)) {
+                static_config_error_str = "validate for [" + key + "] failed\n";
+                return false;
             }
-            return false;
+
+            field.swap(temp_value);
         }
 
-        return true; // ключа не существует, игнорим проверки
+        return true;
     }
 
     // комментарии учитываются только при записи
@@ -95,6 +97,11 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_queue<T>::val
             temp_value.pop();
         }
         config[key].setComment(prefix_comment, suffix_comment);
+    }
+
+    static bool compare(const T& field, const T& other, const std::string& key)
+    {
+        return field == other;
     }
 };
 

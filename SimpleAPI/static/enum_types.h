@@ -24,6 +24,7 @@ struct ConfigTypeTraits<T, typename std::enable_if<std::is_enum<T>::value>::type
             T temp_value;
             EnumFromString(config[key].getString(), temp_value);
             if(temp_value == T::_UNDEFINED_STATE_) {
+                static_config_error_str = "loader for [" + key + "] failed\n";
                 return false;
             }
 
@@ -42,16 +43,20 @@ struct ConfigTypeTraits<T, typename std::enable_if<std::is_enum<T>::value>::type
         if(config.isMapContainer() && config.containsKey(key)) {
             T temp_value;
             EnumFromString(config[key].getString(), temp_value);
-
-            if(ExecuteValidator(lambda, temp_value, key))
-            {
-                field = temp_value;
-                return field != T::_UNDEFINED_STATE_;
+            if(temp_value == T::_UNDEFINED_STATE_) {
+                static_config_error_str = "loader for [" + key + "] failed\n";
+                return false;
             }
-            return false;
+
+            if(!ExecuteValidator(lambda, temp_value, key)) {
+                static_config_error_str = "validate for [" + key + "] failed\n";
+                return false;
+            }
+
+            field = temp_value;
         }
 
-        return true; // ключа не существует, игнорим проверки
+        return true;
     }
 
     // комментарии учитываются только при записи
@@ -63,6 +68,11 @@ struct ConfigTypeTraits<T, typename std::enable_if<std::is_enum<T>::value>::type
 
         config[key] = ToString(field);
         config[key].setComment(prefix_comment, suffix_comment);
+    }
+
+    static bool compare(const T& field, const T& other, const std::string& key)
+    {
+        return field == other;
     }
 };
 

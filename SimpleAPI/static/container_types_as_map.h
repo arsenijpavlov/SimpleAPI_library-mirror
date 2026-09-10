@@ -118,6 +118,7 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_map<T>::value
                 Type item_temp_value;
 
                 if(!Loader((*c.second.get()), item_temp_value)) {
+                    static_config_error_str += "inner loader for [" + key + "] failed\n";
                     return false;
                 }
 
@@ -145,6 +146,7 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_map<T>::value
                 Type item_temp_value;
 
                 if(!Loader((*c.second.get()), item_temp_value)) {
+                    static_config_error_str += "inner loader for [" + key + "] failed\n";
                     return false;
                 }
 
@@ -152,6 +154,7 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_map<T>::value
             }
 
             if(!ExecuteValidator(lambda, temp_value, key)) {
+                static_config_error_str = "validate for [" + key + "] failed\n";
                 return false;
             }
 
@@ -176,6 +179,11 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_map<T>::value
             config[key].push_back(extract_key(item.first), temp);
         }
         config[key].setComment(prefix_comment, suffix_comment);
+    }
+
+    static bool compare(const T& field, const T& other, const std::string& key)
+    {
+        return field == other;
     }
 };
 

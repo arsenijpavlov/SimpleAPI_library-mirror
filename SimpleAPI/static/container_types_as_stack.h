@@ -32,6 +32,7 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_stack<T>::val
                 Type item_temp_value;
 
                 if(!Loader((*c.get()), item_temp_value)) {
+                    static_config_error_str += "inner loader for [" + key + "] failed\n";
                     return false;
                 }
 
@@ -60,21 +61,22 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_stack<T>::val
                 Type item_temp_value;
 
                 if(!Loader((*c.get()), item_temp_value)) {
+                    static_config_error_str += "inner loader for [" + key + "] failed\n";
                     return false;
                 }
 
                 temp_value.push(item_temp_value);
             }
 
-            if(ExecuteValidator(lambda, temp_value, key))
-            {
-                field.swap(temp_value);
-                return true;
+            if(!ExecuteValidator(lambda, temp_value, key)) {
+                static_config_error_str = "validate for [" + key + "] failed\n";
+                return false;
             }
-            return false;
+
+            field.swap(temp_value);
         }
 
-        return true; // ключа не существует, игнорим проверки
+        return true;
     }
 
     // комментарии учитываются только при записи
@@ -101,6 +103,29 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_stack<T>::val
             config[key].push_back(temp);
         }
         config[key].setComment(prefix_comment, suffix_comment);
+    }
+
+    static bool compare(const T& field, const T& other, const std::string& key)
+    {
+        // итераторов нет, работаем со временными объектами для сравнения
+        T t1 = field;
+        T t2 = other;
+
+        if(t1.size() != t2.size())
+        {
+            return false;
+        }
+        while(!t1.empty()) {
+            if(t1.top() != t2.top())
+            {
+                return false;
+            }
+            // переходим к следующей паре элементов
+            t1.pop();
+            t2.pop();
+        }
+
+        return true;
     }
 };
 

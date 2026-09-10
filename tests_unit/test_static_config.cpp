@@ -55,7 +55,7 @@ using UMMapPlaceholder  = std::unordered_multimap<int, float>;
 using PairPlaceholder   = std::pair<std::string, int>;
 
 #define STRUCT_FIELDS(X)                                                                                         \
-    X(bool,                           val_b,       1                                                           ) \
+    X(bool,                           val_b,       true                                                        ) \
     X(int,                            val_i,       1                                                           ) \
     X(uint8_t,                        val_u8,      1                                                           ) \
     X(uint16_t,                       val_u16,     1                                                           ) \
@@ -156,6 +156,7 @@ TEST(STATIC, main) {
     Config cfg = cs2.saveConfig();
     cfg.writeFile("static.json", simpleapi::ConfigFormat::eJSON);
     EXPECT_TRUE(cs2_copy.loadConfig(cfg));
+    EXPECT_EQ(static_config_error_str, "");
 
     EXPECT_EQ(cs2.cs,  cs2_copy.cs);
     EXPECT_EQ(cs2.i,   cs2_copy.i);

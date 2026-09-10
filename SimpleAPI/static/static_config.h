@@ -90,17 +90,18 @@
     SAPI_GETTER_MACRO_6(__VA_ARGS__, SAPI_SAVE_FIELD_6, SAPI_SAVE_FIELD_5, SAPI_SAVE_FIELD_4, SAPI_SAVE_FIELD_3)(__VA_ARGS__)
 
 // сравнители
-#define SAPI_COMMON_OPERATOR_EQUAL(name)                 \
-    simpleapi::tools::CompareValues(name, other.name) &&
+#define SAPI_COMMON_OPERATOR_EQUAL(type, name)                                   \
+    simpleapi::tools::ConfigTypeTraits<type>::compare(name, other.name, #name) &&
+    // simpleapi::tools::CompareValues(name, other.name) &&
 //---
 #define SAPI_OPERATOR_EQUAL_MACRO_3(type, name, default_value)                                         \
-    SAPI_COMMON_OPERATOR_EQUAL(name)
+    SAPI_COMMON_OPERATOR_EQUAL(type, name)
 #define SAPI_OPERATOR_EQUAL_MACRO_4(type, name, default_value, lambda)                                 \
-    SAPI_COMMON_OPERATOR_EQUAL(name)
+    SAPI_COMMON_OPERATOR_EQUAL(type, name)
 #define SAPI_OPERATOR_EQUAL_MACRO_5(type, name, default_value, lambda, prefix_comment)                 \
-    SAPI_COMMON_OPERATOR_EQUAL(name)
+    SAPI_COMMON_OPERATOR_EQUAL(type, name)
 #define SAPI_OPERATOR_EQUAL_MACRO_6(type, name, default_value, lambda, prefix_comment, suffix_comment) \
-    SAPI_COMMON_OPERATOR_EQUAL(name)
+    SAPI_COMMON_OPERATOR_EQUAL(type, name)
 // обёртка
 #define SAPI_OPERATOR_EQUAL_MACRO(...) \
     SAPI_GETTER_MACRO_6(__VA_ARGS__, SAPI_OPERATOR_EQUAL_MACRO_6, SAPI_OPERATOR_EQUAL_MACRO_5, SAPI_OPERATOR_EQUAL_MACRO_4, SAPI_OPERATOR_EQUAL_MACRO_3)(__VA_ARGS__)
@@ -244,6 +245,7 @@
         }                                                             \
                                                                       \
         bool loadConfig(const simpleapi::Config& load_conf) {         \
+            simpleapi::static_config_error_str.clear();               \
             SAPI_FIELDS_MACRO(SAPI_LOAD_FIELD)                        \
             return true;                                              \
         }                                                             \

@@ -31,7 +31,8 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_array<T>::val
                 Type item_temp_value;
                 if(ck.size() > counter)
                 {
-                    if(!Loader(ck[counter++], item_temp_value)) {
+                    if(!Loader(ck[counter], item_temp_value)) {
+                        static_config_error_str += "inner loader for [" + key + "] failed\n";
                         return false;
                     }
                 } else {
@@ -66,6 +67,7 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_array<T>::val
                 if(ck.size() > counter)
                 {
                     if(!Loader(ck[counter++], item_temp_value)) {
+                        static_config_error_str += "inner loader for [" + key + "] failed\n";
                         return false;
                     }
                 } else {
@@ -78,6 +80,7 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_array<T>::val
             }
 
             if(!ExecuteValidator(lambda, temp_value, key)) {
+                static_config_error_str = "validate for [" + key + "] failed\n";
                 return false;
             }
 
@@ -102,6 +105,11 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_array<T>::val
             config[key].push_back(temp);
         }
         config[key].setComment(prefix_comment, suffix_comment);
+    }
+
+    static bool compare(const T& field, const T& other, const std::string& key)
+    {
+        return field == other;
     }
 };
 

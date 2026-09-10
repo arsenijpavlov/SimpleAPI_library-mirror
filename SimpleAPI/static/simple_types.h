@@ -49,7 +49,8 @@ struct ConfigTypeTraits<T, typename std::enable_if<!is_config_struct<T>::value
         if(config.isMapContainer() && config.containsKey(key)) {
             T temp_value = config[key].get<T>();
 
-            if(ExecuteValidator(lambda, temp_value, key)) {
+            if(!ExecuteValidator(lambda, temp_value, key)) {
+                static_config_error_str = "validate for [" + key + "] failed\n";
                 return false;
             }
 
@@ -68,6 +69,11 @@ struct ConfigTypeTraits<T, typename std::enable_if<!is_config_struct<T>::value
 
         config[key] = field;
         config[key].setComment(prefix_comment, suffix_comment);
+    }
+
+    static bool compare(const T& field, const T& other, const std::string& key)
+    {
+        return field == other;
     }
 };
 
