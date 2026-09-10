@@ -165,3 +165,40 @@ TEST(STATIC, main) {
 
     EXPECT_EQ(cs2, cs2_copy);
 }
+
+TEST(STATIC, correct_reader_bool) {
+    using namespace simpleapi;
+
+    CustomStruct cs1;
+    Config cfg1;
+    bool new_cfg_bool;
+
+    cfg1          = cs1.saveConfig();
+    new_cfg_bool = !cfg1["val_b"].getBool();
+    cfg1["val_b"] = new_cfg_bool;
+    EXPECT_TRUE(cs1.loadConfig(cfg1));
+    EXPECT_EQ(cs1.val_b, new_cfg_bool);
+
+    // дубль с инвертированным значением
+    cfg1          = cs1.saveConfig();
+    new_cfg_bool = !cfg1["val_b"].getBool();
+    cfg1["val_b"] = new_cfg_bool;
+    EXPECT_TRUE(cs1.loadConfig(cfg1));
+    EXPECT_EQ(cs1.val_b, new_cfg_bool);
+
+    CustomStruct2 cs2;
+    Config cfg2;
+
+    cfg2                = cs2.saveConfig();
+    new_cfg_bool        = !cfg2["cs"]["val_b"].getBool();
+    cfg2["cs"]["val_b"] = new_cfg_bool;
+    EXPECT_TRUE(cs2.loadConfig(cfg2));
+    EXPECT_EQ(cs2.cs.val_b, new_cfg_bool);
+
+    // дубль с инвертированным значением
+    cfg2                = cs2.saveConfig();
+    new_cfg_bool        = !cfg2["cs"]["val_b"].getBool();
+    cfg2["cs"]["val_b"] = new_cfg_bool;
+    EXPECT_TRUE(cs2.loadConfig(cfg2));
+    EXPECT_EQ(cs2.cs.val_b, new_cfg_bool);
+}
