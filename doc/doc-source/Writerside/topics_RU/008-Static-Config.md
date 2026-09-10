@@ -95,6 +95,7 @@ Config позволяет многое, но упускает иногда гл�
 - `bool loadConfig(const simpleapi::Config& config)`
     - заполнит структуру значениями из config; вернёт true если все поля были прочитаны корректно и провалидировано 
     лямбдой (при наличии)
+    - в случае ошибки загрузки значения заполнит глобальную строку `simpleapi::static_config_error_str`
 - `simpleapi::Config saveConfig() const`
     - сохранит значения полей структуры в объект Config
 
