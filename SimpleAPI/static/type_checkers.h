@@ -142,20 +142,16 @@ class is_container_as_priority_queue {
     // очистка типа от const и ссылок
     using CleanT = typename std::decay<T>::type;
 
-    // метод для SFINAE проверки
-    template <typename Dummy = CleanT,
-              typename = typename std::enable_if<
-                 std::is_same<Dummy, std::priority_queue<typename Dummy::value_type,
-                                                         typename Dummy::container_type,
-                                                         typename Dummy::value_compare>>::value
-                 >::type
-             >
-    static char test(int);
-    // метод для разрешения конфликта для поля value
+    // Базовый шаблон: для всех типов выдает false
     template <typename U>
-    static long test(...);
+    struct check : std::false_type {};
+
+    // Специализация для std::priority_queue (4 параметра)
+    template <typename K, typename V, typename C>
+    struct check<std::priority_queue<K, V, C>> : std::true_type {};
+
 public:
-    static const bool value = (sizeof(test<CleanT>(0)) == sizeof(char));
+    static const bool value = check<CleanT>::value;
 };
 //----------------
 template <typename T>
