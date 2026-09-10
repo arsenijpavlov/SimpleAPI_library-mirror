@@ -35,6 +35,8 @@ Config позволяет многое, но упускает иногда гл�
     - `std::multimap<K, T>`
     - `std::unordered_map<K, T>`
     - `std::unordered_multimap<K, T>`
+- `std::pair<K, T>`
+- динамический ассоциативный массив `simpleapi::Config`
 
 ## Макросы описания
 ### X-Macro
