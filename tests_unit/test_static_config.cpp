@@ -202,3 +202,22 @@ TEST(STATIC, correct_reader_bool) {
     EXPECT_TRUE(cs2.loadConfig(cfg2));
     EXPECT_EQ(cs2.cs.val_b, new_cfg_bool);
 }
+
+#define TEST_FIELDS(X) \
+    X(float, fl, 2.4f)
+SAPI_REGISTER_CONFIG(FloatConf, TEST_FIELDS)
+
+TEST(STATIC, float_writer) {
+    using namespace simpleapi;
+
+    float ff = 2.4f;
+    long double ld = static_cast<long double>(ff);
+    EXPECT_EQ(ld, 2.4f);
+
+    FloatConf fc;
+    Config cfg = fc.saveConfig();
+    cfg.parseJson(cfg.toString());
+    fc.loadConfig(cfg);
+
+    EXPECT_EQ(fc.fl, 2.4f);
+}
