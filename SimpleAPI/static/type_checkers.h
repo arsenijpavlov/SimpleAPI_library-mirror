@@ -428,35 +428,6 @@ static bool ExecuteValidator(ValidatorT validator, T&& t, Args&&... args)
     return not_ptr_validator(std::forward<T>(t));
 }
 // ----------------------------------------------------------------------------
-// функции уникального поведения operator== в зависимости от типа переменных
-template <typename T>
-static bool CompareValues(T t1, T t2)
-{
-    return t1 == t2;
-}
-// std::priority_queue
-// итераторов нет, поэтому берём копии объектов
-template <typename T, typename T_Container, typename T_Compare>
-static bool CompareValues(std::priority_queue<T, T_Container, T_Compare> t1,
-                          std::priority_queue<T, T_Container, T_Compare> t2)
-{
-    if(t1.size() != t2.size())
-    {
-        return false;
-    }
-    while(!t1.empty()) {
-        if(t1.top() != t2.top())
-        {
-            return false;
-        }
-        // переходим к следующей паре элементов
-        t1.pop();
-        t2.pop();
-    }
-
-    return true;
-}
-// ----------------------------------------------------------------------------
 
 } // namespace tools
 } // namespace simpleapi
