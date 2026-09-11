@@ -181,7 +181,7 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_container_as_map<T>::value
         config[key].setComment(prefix_comment, suffix_comment);
     }
 
-    static bool compare(const T& field, const T& other, const std::string& key)
+    static bool compare(const T& field, const T& other)
     {
         return field == other;
     }

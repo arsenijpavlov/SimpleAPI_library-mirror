@@ -90,9 +90,8 @@
     SAPI_GETTER_MACRO_6(__VA_ARGS__, SAPI_SAVE_FIELD_6, SAPI_SAVE_FIELD_5, SAPI_SAVE_FIELD_4, SAPI_SAVE_FIELD_3)(__VA_ARGS__)
 
 // сравнители
-#define SAPI_COMMON_OPERATOR_EQUAL(type, name)                                   \
-    simpleapi::tools::ConfigTypeTraits<type>::compare(name, other.name, #name) &&
-    // simpleapi::tools::CompareValues(name, other.name) &&
+#define SAPI_COMMON_OPERATOR_EQUAL(type, name) \
+    simpleapi::tools::ConfigTypeTraits<type>::compare(name, other.name) &&
 //---
 #define SAPI_OPERATOR_EQUAL_MACRO_3(type, name, default_value)                                         \
     SAPI_COMMON_OPERATOR_EQUAL(type, name)
