@@ -984,3 +984,19 @@ TEST(JSON, write_infinities) {
 
     EXPECT_EQ(test, "{\"a\":\"inf\",\"b\":\"-inf\"}");
 }
+
+TEST(JSON, parser_with_comment) {
+    using namespace simpleapi;
+
+    CommentDesign cd;
+    cd.with_comments = true;
+    Config cfg;
+    cfg["a"] = 15;
+    cfg["a"].setComment("prefix comment]", "suffix comment]");
+
+    Config cfg2;
+    // cfg.parseJson(cfg.toString(simpleapi::ConfigFormat::eJSON, cd));
+    cfg.readFileJson("/home/riddick/Downloads/sib_config.json");
+
+    EXPECT_EQ(cfg2.getError(), "");
+}
