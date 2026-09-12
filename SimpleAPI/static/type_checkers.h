@@ -286,6 +286,23 @@ class is_pair {
 public:
     static const bool value = (sizeof(test<CleanT>(0)) == sizeof(char));
 };
+//----------------
+template <typename T>
+class is_optional {
+    // очистка типа от const и ссылок
+    using CleanT = typename std::decay<T>::type;
+
+    // Базовый шаблон: для всех типов выдает false
+    template <typename U>
+    struct check : std::false_type {};
+
+    // Специализация для simpleapi::Optional
+    template <typename U>
+    struct check<simpleapi::Optional<U>> : std::true_type {};
+
+public:
+    static const bool value = check<CleanT>::value;
+};
 // ----------------------------------------------------------------------------
 
 // разделение чтения переменной "value=get<T>()"/"value=T::loadConfig(cfg)"

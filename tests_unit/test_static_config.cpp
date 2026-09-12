@@ -128,7 +128,13 @@ auto lambda_2 = [](const int& val, const std::string& key) -> bool {
     X(int, i_7, 0, lambda_2, "comment", "comment" )
 
 SAPI_REGISTER_CONFIG(StructWithLambdas, WITH_LAMBDA_FIELDS)
+//-------------------------------------------------------------------------
 
+// Опциональные и вариативные значения
+#define OPT_VAR_FIELDS(X) \
+    X(simpleapi::Optional<int>, opt_i, simpleapi::Optional<int>())
+
+SAPI_REGISTER_CONFIG(OptVarConfig, OPT_VAR_FIELDS)
 //-------------------------------------------------------------------------
 
 // вариант рекурсивных вложенностей зарегистрированных структур
@@ -136,7 +142,8 @@ SAPI_REGISTER_CONFIG(StructWithLambdas, WITH_LAMBDA_FIELDS)
     X(int,               i,  15)                   \
     X(CustomStruct,      cs, CustomStruct())       \
     X(MapConfig,         mc, MapConfig())          \
-    X(StructWithLambdas, swl, StructWithLambdas())
+    X(StructWithLambdas, swl, StructWithLambdas()) \
+    X(OptVarConfig,      ovc, OptVarConfig())
 
 SAPI_REGISTER_CONFIG(CustomStruct2, STRUCT2_FIELDS)
 //-------------------------------------------------------------------------
@@ -162,6 +169,7 @@ TEST(STATIC, main) {
     EXPECT_EQ(cs2.i,   cs2_copy.i);
     EXPECT_EQ(cs2.mc,  cs2_copy.mc);
     EXPECT_EQ(cs2.swl, cs2_copy.swl);
+    EXPECT_EQ(cs2.ovc, cs2_copy.ovc);
 
     EXPECT_EQ(cs2, cs2_copy);
 }

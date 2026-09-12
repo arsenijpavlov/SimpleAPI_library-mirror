@@ -40,6 +40,8 @@ Config позволяет многое, но упускает иногда гл�
     - `std::unordered_multimap<K, T>`
 - `std::pair<K, T>`
 - динамический ассоциативный массив `simpleapi::Config`
+- опциональное значение `simpleapi::Optional<T>`
+    - запишет в файл конфига две переменные: `<key>` и `<key>_optional`
 
 ## Макросы описания
 ### X-Macro

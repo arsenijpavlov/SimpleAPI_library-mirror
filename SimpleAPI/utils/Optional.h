@@ -10,6 +10,8 @@ class Optional {
     T    m_value;
     bool m_status;
 public:
+    using type = T;
+
     Optional<T>()                                       noexcept
         : m_status(false)
     {}
@@ -53,25 +55,25 @@ public:
 
     void set(const T& value)                            noexcept
     {
-        m_value = value;
+        m_value  = value;
         m_status = true;
     }
     void set(T&& value)                                 noexcept
     {
-        m_value = std::move(value);
+        m_value  = std::move(value);
         m_status = true;
     }
     void set(const Optional<T>& other)                  noexcept
     {
         if(this != &other) {
-            m_value = other.m_value;
+            m_value  = other.m_value;
             m_status = other.m_status;
         }
     }
     void set(Optional<T>&& other)                       noexcept
     {
         if(this != &other) {
-            m_value = other.m_value;
+            m_value  = other.m_value;
             m_status = other.m_status;
         }
     }
@@ -82,10 +84,20 @@ public:
     T&   value()                                        noexcept        { return m_value; }
     T    value()                                        const noexcept  { return m_value; }
 
-    bool operator==(const T& value)                     const noexcept  { return m_status && m_value == value; }
-    bool operator!=(T&& value)                          const noexcept  { return !(*this == value); }
-    bool operator==(const Optional<T>& other)           const noexcept  { return !(*this != other); }
-    bool operator!=(Optional<T>&& other)                const noexcept  { return (m_status != other.m_status) || (m_value != other); }
+    bool operator==(const T& other)                     const noexcept
+    {
+        return m_status && m_value == other;
+    }
+    bool operator!=(const T& other)                     const noexcept  { return !(*this == other); }
+    bool operator==(const Optional<T>& other)           const noexcept
+    {
+        bool b = m_status == other.m_status;
+        if(b && m_status) {
+            return m_value == other.m_value;
+        }
+        return b;
+    }
+    bool operator!=(const Optional<T>& other)           const noexcept  { return !(*this == other); }
 };
 
 } // namespace simpleapi
