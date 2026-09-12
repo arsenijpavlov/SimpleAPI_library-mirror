@@ -84,13 +84,9 @@ struct ConfigTypeTraits<T, typename std::enable_if<is_optional<T>::value>::type>
 
         // сохраняем параметр опциональности
         config[key + opt_str] = field.isValid();
-        // сохраняем опциональные данные (null при отсутствии)
-        // NOTE: нельзя обернуть в тернарный оператор из-за разных типов присваиваемого значения
-        if(field.isValid()) {
-            config[key] = field.value();
-        } else {
-            config[key] = Config(ValueType::eNull);
-        }
+        // сохраняем опциональные данные
+        // даже значение отключенного типа даёт достаточно информации пользователю конфига для примера заполнения
+        config[key] = field.value();
 
         config[key].setComment(prefix_comment, suffix_comment);
     }

@@ -12,65 +12,77 @@ class Optional {
 public:
     using type = T;
 
-    Optional<T>()                                       noexcept
+    Optional<T>()                                               noexcept
         : m_status(false)
     {}
-    Optional<T>(const T& value)                         noexcept
+    Optional<T>(const T& value, bool enable = true)             noexcept
     {
         set(value);
+
+        // значение сохранится, но будет выключено
+        if(!enable) unset();
     }
-    Optional<T>(T&& value)                              noexcept
+    Optional<T>(T&& value, bool enable = true)                  noexcept
     {
         set(std::move(value));
+
+        // значение сохранится, но будет выключено
+        if(!enable) unset();
     }
-    Optional<T>(const Optional<T>& other)               noexcept
+    Optional<T>(const Optional<T>& other, bool enable = true)   noexcept
     {
         set(other);
+
+        // значение сохранится, но будет выключено
+        if(!enable) unset();
     }
-    Optional<T>(Optional<T>&& other)                    noexcept
+    Optional<T>(Optional<T>&& other, bool enable = true)        noexcept
     {
         set(std::move(other));
+
+        // значение сохранится, но будет выключено
+        if(!enable) unset();
     }
 
-    Optional<T>& operator=(const T& value)              noexcept
+    Optional<T>& operator=(const T& value)                      noexcept
     {
         set(value);
         return *this;
     }
-    Optional<T>& operator=(T&& value)                   noexcept
+    Optional<T>& operator=(T&& value)                           noexcept
     {
         set(std::move(value));
         return *this;
     }
-    Optional<T>& operator=(const Optional<T>& other)    noexcept
+    Optional<T>& operator=(const Optional<T>& other)            noexcept
     {
         set(other);
         return *this;
     }
-    Optional<T>& operator=(Optional<T>&& other)         noexcept
+    Optional<T>& operator=(Optional<T>&& other)                 noexcept
     {
         set(std::move(other));
         return *this;
     }
 
-    void set(const T& value)                            noexcept
+    void set(const T& value)                                    noexcept
     {
         m_value  = value;
         m_status = true;
     }
-    void set(T&& value)                                 noexcept
+    void set(T&& value)                                         noexcept
     {
         m_value  = std::move(value);
         m_status = true;
     }
-    void set(const Optional<T>& other)                  noexcept
+    void set(const Optional<T>& other)                          noexcept
     {
         if(this != &other) {
             m_value  = other.m_value;
             m_status = other.m_status;
         }
     }
-    void set(Optional<T>&& other)                       noexcept
+    void set(Optional<T>&& other)                               noexcept
     {
         if(this != &other) {
             m_value  = other.m_value;
@@ -79,6 +91,7 @@ public:
     }
 
     explicit operator bool()                            const noexcept  { return m_status; }
+    // выключенное значение не затирает предыдущую реализацию
     void unset()                                        noexcept        { m_status = false; }
     bool isValid()                                      const noexcept  { return m_status; }
     T&   value()                                        noexcept        { return m_value; }

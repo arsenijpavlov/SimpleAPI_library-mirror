@@ -132,7 +132,7 @@ SAPI_REGISTER_CONFIG(StructWithLambdas, WITH_LAMBDA_FIELDS)
 
 // Опциональные и вариативные значения
 #define OPT_VAR_FIELDS(X) \
-    X(simpleapi::Optional<int>, opt_i, simpleapi::Optional<int>())
+    X(simpleapi::Optional<int>, opt_i, simpleapi::Optional<int>(15, false))
 
 SAPI_REGISTER_CONFIG(OptVarConfig, OPT_VAR_FIELDS)
 //-------------------------------------------------------------------------
