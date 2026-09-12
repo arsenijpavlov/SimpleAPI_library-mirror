@@ -143,11 +143,18 @@ struct is_contains_duplicate<Head, Tail...> {
 
 template <typename... Types>
 class Variant {
+    static_assert(!tools::is_contains_duplicate<Types...>::value, "SimpleAPI: incorrect types list, found duplicates");
+
+    template <std::size_t Index, typename... TypesList>
+    struct Creator;
+
+    template <std::size_t Index, typename... TypesList>
+    struct Destroyer;
+
 public:
     static constexpr std::size_t size = tools::max_size_of_type<Types...>::size;
     static constexpr std::size_t align_size = tools::max_align_of_type<Types...>::align_size;
 
-    static_assert(!tools::is_contains_duplicate<Types...>::value, "SimpleAPI: Incorrect type list! Found duplicates!");
 
     // по умолчанию проинициализируется первым типом (его значение по умолчанию)
     Variant() noexcept : m_current_type_index(0) {
@@ -155,14 +162,59 @@ public:
         new (data) typename tools::type_at_index<0, Types...>::type(0);
     }
 
-//    template <typename T>
-//    Variant() {
+    template <typename T, typename std::enable_if<tools::is_contains_type<T, Types...>::type, int>::type = 0>
+    Variant(const T& value) {
+        /* FIXME */
+    }
 
-//    }
+    template <typename T, typename std::enable_if<tools::is_contains_type<T, Types...>::type, int>::type = 0>
+    Variant(T&& value) {
+        /* FIXME */
+    }
 
-    // set
-    // get<T>
-    // getType
+    ~Variant() {
+        /* FIXME */
+    }
+
+    template <typename T, typename std::enable_if<tools::is_contains_type<T, Types...>::type, int>::type = 0>
+    Variant& operator=(const T& other) {
+        /* FIXME */
+        return {};
+    }
+
+    template <typename T, typename std::enable_if<tools::is_contains_type<T, Types...>::type, int>::type = 0>
+    Variant& operator=(T&& other) {
+        /* FIXME */
+        return {};
+    }
+
+    template <typename T, typename std::enable_if<tools::is_contains_type<T, Types...>::type, int>::type = 0>
+    void set(const T& other) {
+        /* FIXME */
+    }
+
+    template <typename T, typename std::enable_if<tools::is_contains_type<T, Types...>::type, int>::type = 0>
+    void set(T&& other) {
+        /* FIXME */
+    }
+
+    template <typename T, typename std::enable_if<tools::is_contains_type<T, Types...>::type, int>::type = 0>
+    Variant& get() {
+        /* FIXME */
+        return {};
+    }
+
+    template <typename T, typename std::enable_if<tools::is_contains_type<T, Types...>::type, int>::type = 0>
+    Variant get() const {
+        /* FIXME */
+        return {};
+    }
+
+    /**
+     * @brief index
+     * @return Возвращает текущий индекс типа.
+     */
+    ssize_t index() const noexcept { return m_current_type_index; }
 
 private:
     ssize_t m_current_type_index;
